@@ -57,10 +57,15 @@ const puppeteer = require('puppeteer');
 
 async function openURLAndExecuteFunction(url) {
   try {
-    const browser = await puppeteer.launch({executablePath: '/mnt/c/Users/risha/Downloads/chromedriver.exe', timeout: 60000, headless: false});
+    // const browser = await puppeteer.launch({executablePath: '/mnt/c/Users/risha/Downloads/chromedriver.exe', timeout: 60000, headless: false});
+    // console.log('YESSSSSSSS')
+    const browser = await puppeteer.launch({
+      executablePath: '/mnt/c/Program Files/Google/Chrome/Application/chrome.exe', // Replace with the actual path to your Chrome executable on Windows
+      // args: ['--no-sandbox'], // Optionally disable sandbox if needed
+      headless: false,
+    });
     const page = await browser.newPage();
     await page.goto(url);
-
     // Execute your JavaScript function here
     await page.evaluate(() => {
       extract_img_links(brand);
@@ -74,3 +79,35 @@ async function openURLAndExecuteFunction(url) {
 
 // Replace 'https://www.example.com' with the URL you want to open
 openURLAndExecuteFunction(url);
+
+// const axios = require('axios');
+// const { JSDOM } = require('jsdom');
+// const { window } = new JSDOM('<!DOCTYPE html><html><body></body></html>');
+// const $ = require('jquery')(window);
+// async function openURLAndExecuteFunction(url, jsFunction) {
+//   try {
+//     const response = await axios.get(url);
+//     const dom = new JSDOM(response.data, { runScripts: 'dangerously', resources: 'usable', window });
+//     const result = dom.window.eval(jsFunction);
+
+//     return result;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+
+// // Example usage:
+// const jsFunction = () => {
+//   // Replace this function with the JavaScript function you want to execute on the page
+//   // Your code can now use the injected jQuery instance as '$' or 'jQuery'
+//   return $('title').text(); // Return the page title using jQuery
+// };
+
+// openURLAndExecuteFunction(url, jsFunction)
+//   .then((result) => {
+//     console.log('Result:', result);
+//   })
+//   .catch((error) => {
+//     console.error('Error:', error);
+//   });
+

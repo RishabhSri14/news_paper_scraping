@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 var fs = require('fs')
 const brand_names = require('./brand_names.json')
+const indices = require('./config.json')
 function extract_brand_links() {
   // First go to https://www.advertgallery.com/product-category/advertisements-by-brand
   console.log("Extracting Brand Links")
@@ -36,7 +37,7 @@ async function openURLAndExecuteFunction(url) {
   try {
     // const browser = await puppeteer.launch({executablePath: '/mnt/c/Users/risha/Downloads/chromedriver.exe', timeout: 60000, headless: false});
     // console.log('YESSSSSSSS')
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({timeout:60000});
     const page = await browser.newPage();
     await page.goto(url);
     const data = await page.evaluate(() => {
@@ -62,8 +63,8 @@ async function openURLAndExecuteFunction(url) {
 }
 
 const result = async function(){
-  for (var i =0;i<brand_names.length;i++){
-
+  for (var i =indices['start_idx'];i<indices['end_idx'];i++){
+    console.log('Started Downloading for idx'+i.toString()+' ==> '+brand_names[i])
     var brand = brand_names[i]
     var url = 'https://www.advertgallery.com/product-category/advertisements-by-brand/' + brand + '/'
   
@@ -72,10 +73,8 @@ const result = async function(){
     fs.writeFile("../Data/" + brand + ".json", JSON.stringify(json_data), err => {
     
       if (err) throw err;
-    
-      console.log("Done writing"); // Success
+      
     });
   }
-  return json_data 
 }
 result()
